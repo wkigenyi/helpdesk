@@ -1,0 +1,46 @@
+
+{% extends 'support/base.html' %}
+{% load bootstrap4 %}
+{% block navlinks %}
+    <li><a href="{% url 'users:register' %}"><i class="fa fa-pencil"></i>Register</a></li>
+    <li><a href="{% url 'users:password_reset' %}"><i class="fa fa-tools"></i>Reset Password</a></li>
+{% endblock %}
+{% block main%}
+
+
+<div class="row">
+    <div class="col-md-9" id="main">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="well">
+                    <form action="{% url 'users:login' %}" class="form" method="POST">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        <button name="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i>Login</button>
+                        <input type="hidden" name="next" value="{{ next }}"/>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-7">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" id="sidebar">
+        <div class="section about">
+            <div class="well well-lg">
+                <p>This is a secured system, please login with your registered email address and passord</p>
+                <p>To register or reset passord, use the links above</p>
+            </div>
+        </div>
+        <div class="section">
+                <a href="{% url 'users:register' %}" class="btn btn-lg btn-block btn-warning"><i class="fa fa-pencil"></i>Register</a>
+        </div>
+        <div class="section">
+                <a href="{% url 'users:password_reset' %}" class="btn btn-lg btn-block btn-primary"><i class="fa fa-tools"></i>Reset Password</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

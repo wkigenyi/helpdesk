@@ -1,0 +1,75 @@
+{% extends 'support/base.html' %}
+{% block navlinks %}
+    {% if user.is_authenticated %}
+        <li class="dropdown">
+            <a 
+            id="user" 
+            href="#" 
+            class="dropdown-toggle" 
+            data-toggle="dropdown" 
+            role="button"
+            aria-expanded="false">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <span class="caret"></span>
+            <span class="sr-only">{{ user }}</span>
+            </a>
+            <ul class="dropdown-menu user" role="menu" aria-labelledby="user">
+                <li><a href="{% url 'support:create_staffprofile' %}"><i class="fa fa-edit" aria-hidden="true"></i>Profile</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'users:logout' %}?next=/"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+
+            </ul>
+        </li>
+    {% else %}
+        <li><a href="{% url 'users:login' %}"><i class="fa fa-sign-in"></i>Login</a></li>
+        <li><a href="{% url 'users:register' %}"><i class="fa fa-pencil"></i>Register</a></li>
+    {% endif %}
+    
+{% endblock %}
+{% block main %}
+        {% if user.is_authenticated %}
+            <div class="row">
+                <div class="col-md-9" id="main">
+                    {% block content %}
+                    
+                    {% endblock %}
+                </div>  
+                {% block actions %}
+                <div class="col-md-3" id="sidebar">
+                    
+                    <div class="section">
+                        <a class="btn btn-lg btn-success btn-block" href="{% url 'support:new_ticket' %}"><i class="fa fa-plus"></i>Create A Ticket</a>
+                    </div>
+                    
+                </div>
+                {% endblock %}
+            </div>
+        {% else %}
+
+            <div class="row align-items-center">
+                <div class="col-6 mx-auto col-md-6 order-md-2">
+                    
+                </div>
+                <div class="col-md-6 order-md-1 text-center text-md-left pr-md-5">
+                    <h1 class="mb-3 bd-text-purple-bright"> INTERMECH SUPPORT</h1>
+                    <p class="lead">
+                              Use this tool to report to us any issue that requires our intervention.
+                    </p>
+                    <p class="lead mb-4">
+                              We shall immediately recieve your concern and action it. You can monitor our progress on the raise issue and you can be involved too.
+                    </p>
+                    <div class="row mx-n2">
+                        <div class="col-md-6 px-2">
+                            <a href="{% url 'users:login' %}" class="btn  btn-primary btn-lg btn-block w-100 mb-3"><i class="fa fa-sign-in"></i>Login</a>
+                        </div>
+                        
+                        <div class="col-md-6 px-2">
+                            <a href="{% url 'users:register' %}" class="btn btn-warning btn-lg btn-block w-100 mb-3"><i class="fa fa-pencil"></i>Register</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        {% endif %}
+{% endblock %}

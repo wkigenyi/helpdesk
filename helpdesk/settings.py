@@ -25,7 +25,7 @@ SECRET_KEY = 'rnng5xu8z@x=uxaqxl-&g$v+t0uu_1bx^34+4-ivk$iw!rdi-a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cryptic-mountain-89917.herokuapp.com']
 
 
 # Application definition

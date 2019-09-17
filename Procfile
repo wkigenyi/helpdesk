@@ -1,1 +1,1 @@
-web: gunicorn helpdesk.wsgi --log-file
+web: gunicorn helpdesk.wsgi

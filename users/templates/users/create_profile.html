@@ -1,10 +1,7 @@
 
-{% extends 'support/base.html' %}
+{% extends 'support/index.html' %}
 {% load bootstrap4 %}
-{% block navlinks %}
-    <li><a href="{% url 'users:login' %}"><i class="fa fa-sign-in"></i>Login</a></li>
-    <li><a href="{% url 'users:password_reset' %}"><i class="fa fa-tools"></i>Reset Password</a></li>
-{% endblock %}
+
 {% block main%}
 
 
@@ -19,7 +16,14 @@
                             <legend><i class="fa fa-user"></i>Profile</legend>
                         </fieldset>
                         {% bootstrap_form form %}
-                        <button name="submit" class="btn btn-primary"><i class="fa fa-pencil"></i>Create Profile</button>
+                        <button name="submit" class="btn btn-primary">
+                            <i class="fa fa-pencil"></i>
+                            {% if profile %}
+                                Update Profile
+                            {% else %}
+                                Create Profile
+                            {% endif %}
+                        </button>
                         <input type="hidden" name="next" value="{{ next }}"/>
                     </form>
                 </div>
@@ -32,13 +36,11 @@
     <div class="col-md-3" id="sidebar">
         <div class="section about">
             <div class="well well-lg">
-                <p>This is a secured system, please login with your registered email address and passord</p>
-                <p>To register or reset passord, use the links above</p>
+                <p>Update your profile to more information about account</p>
+                
             </div>
         </div>
-        <div class="section">
-                <a href="{% url 'users:login' %}" class="btn btn-lg btn-block btn-warning"><i class="fa fa-sign-in"></i>Login</a>
-        </div>
+        
         <div class="section">
                 <a href="{% url 'users:password_reset' %}" class="btn btn-lg btn-block btn-primary"><i class="fa fa-tools"></i>Reset Password</a>
         </div>

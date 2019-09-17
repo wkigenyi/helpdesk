@@ -6,6 +6,7 @@ from .models import Status,Ticket
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
+from users.models import CustomUser
 
 # Create your views here.
 def index(request):
@@ -33,10 +34,12 @@ def client_create_ticket(request):
             new_ticket.owner = owner
             new_ticket.assigned_by = assigned
             new_ticket.save()
+            send_ticket_created_email(new_ticket)
+            send_ticket_recieved_email(new_ticket)
             return HttpResponseRedirect(reverse('support:my_tickets'))
+
         pass
     context = {'form':form}
-    send_ticket_created_email(request)
     return render(request,'support/create_ticket.html',context)
 
 @login_required    
@@ -82,9 +85,16 @@ def get_ip_address(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-def send_ticket_created_email(request):
+def send_ticket_created_email(ticket):
     subject = 'Your ticket has been received'
     message = 'ticket details'
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = ['wkigenyi@hotmail.com']
-    send_mail(subject,message,email_from,recipient_list)
+    recipient_list = [ticket.client.email]
+    send_mail(subject,message,email_from,recipient_list,fail_silently=True)
+def send_ticket_recieved_email(ticket):
+    subject = 'A Ticket has been recieved'
+    message = 'Ticket ID:'+str(ticket.track_id)
+    email_from = settings.EMAIL_HOST_USER
+    admin = CustomUser.objects.get(id=1)
+    recipient_list = [admin.email]
+    send_mail(subject,message,email_from,recipient_list,fail_silently=True)

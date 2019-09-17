@@ -25,7 +25,7 @@ SECRET_KEY = 'rnng5xu8z@x=uxaqxl-&g$v+t0uu_1bx^34+4-ivk$iw!rdi-a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cryptic-mountain-89917.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -124,10 +124,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-# All settings common to all environments
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 #Bootstrap Settings
 BOOTSTRAP4 ={
     'include_jquery': True
@@ -145,3 +142,5 @@ EMAIL_HOST_PASSWORD = 'Xminau28='
 
 # Configure Django App for Heroku.
 import django_heroku
+
+django_heroku.settings(locals())

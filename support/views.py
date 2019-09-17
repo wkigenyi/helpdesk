@@ -57,7 +57,6 @@ def create_staff_profile(request):
             profile = form.save(commit=False)
             profile.user = user
             profile.save()
-            send_ticket_created_email(request)
             return HttpResponseRedirect(reverse('support:tickets'))
         pass
     context = {'form':form}

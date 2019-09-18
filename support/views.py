@@ -122,6 +122,7 @@ def send_ticket_recieved_email(ticket):
     send_mail(subject,message,email_from,recipient_list,fail_silently=True)
 
 def get_user_profile( request ):
+    profile = None
     try: 
         profile = StaffProfile.objects.get(user = request.user)
     except DoesNotExist:

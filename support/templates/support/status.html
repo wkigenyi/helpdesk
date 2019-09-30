@@ -1,0 +1,44 @@
+{% extends 'support/index.html' %}
+{% block content %}
+<h1>Status</h1>
+{% if statuses %}
+<table class="table table-striped table-middle-aligned">
+    <thead>
+        <tr>
+            <th scope="col">Status Name</th>
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+            {% for status in statuses %}
+            <tr>
+                <td>{{ status }}</td>
+                <td class="text-right">
+                    <div class="item-actions">
+                        <a class="btn btn-default btn-sm" href="#"><i class="fa fa-eye"></i>Show</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+    </tbody>
+</table>
+<ul>
+
+            
+
+</ul>
+
+{% else %}
+<p>No Status Yet</p>
+{% endif %}
+{% endblock %}
+
+{% block actions %}
+    <div class="col-md-3" id="sidebar">
+                    
+        <div class="section">
+            <a class="btn btn-lg btn-success btn-block" href="{% url 'support:new_status' %}"><i class="fa fa-plus"></i>Add A New Status</a>
+        </div>
+                    
+    </div>
+{% endblock %}

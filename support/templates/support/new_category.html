@@ -1,0 +1,27 @@
+{% extends 'support/index.html' %}
+{% load bootstrap4 %}
+
+
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-9" id="main">
+            <h1>Create Category</h1>
+            <form action="{% url 'support:new_category' %}" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>Create Category</button>
+                {% endbuttons %}
+            </form>
+        </div>
+        <div class="col-md-3" id="sidebar">
+            <div class="well well-lg">
+                <p>Enter The Category Name And Save</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

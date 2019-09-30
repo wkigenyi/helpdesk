@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
-from .forms import TicketForm,StaffProfileForm,CompanyForm,ClientProfileForm
+from .forms import TicketForm,StaffProfileForm,CompanyForm,ClientProfileForm,CategoryForm,StatusForm,PriorityForm
 from django.contrib.auth.decorators import login_required
-from .models import Status,Ticket,StaffProfile,ClientProfile,Company
+from .models import Status,Ticket,StaffProfile,ClientProfile,Company,Category, Priority,Status
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
@@ -125,16 +125,93 @@ def create_client_profile(request,id):
     context = {'form':form,'profile':userprofile,'someone':user}
     return render(request,'users/create_client_profile.html',context)
 
-
+@login_required
 def tickets(request):
     tickets = Ticket.objects.all()
     context = { 'tickets':tickets,'profile':get_user_profile(request.user) }
     return render(request,'support/tickets.html',context)
 
+@login_required
 def my_tickets(request):
     tickets = Ticket.objects.filter(client=request.user)
     context = { 'tickets':tickets,'profile':get_user_profile(request.user) }
     return render(request,'support/tickets.html',context)
+@login_required
+def category(request):
+    categories = Category.objects.all()
+    context = { 'categories':categories,'profile':get_user_profile(request.user) }
+    return render(request,'support/category.html',context)
+@login_required    
+def new_category(request):
+    """
+    If the client creating the ticket 
+    """
+    if request.method != 'POST':
+        #Client is creating a new ticket
+        form = CategoryForm()
+    else:
+        
+        form = CategoryForm( request.POST )
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse('support:category'))
+
+        pass
+    context = {'form':form,'profile':get_user_profile(request)}
+    return render(request,'support/new_category.html',context)
+
+
+
+
+@login_required
+def status(request):
+    statuses = Status.objects.all()
+    context = { 'statuses':statuses,'profile':get_user_profile(request.user) }
+    return render(request,'support/status.html',context)
+@login_required    
+def new_status(request):
+    """
+    If the client creating the ticket 
+    """
+    if request.method != 'POST':
+        #Client is creating a new ticket
+        form = StatusForm()
+    else:
+        
+        form = StatusForm( request.POST )
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse('support:status'))
+
+        pass
+    context = {'form':form,'profile':get_user_profile(request)}
+    return render(request,'support/new_status.html',context)
+
+
+@login_required
+def priority(request):
+    priorities = Priority.objects.all()
+    context = { 'priorities':priorities,'profile':get_user_profile(request.user) }
+    return render(request,'support/priority.html',context)
+@login_required    
+def new_priority(request):
+    """
+    If the client creating the ticket 
+    """
+    if request.method != 'POST':
+        #Client is creating a new ticket
+        form = PriorityForm()
+    else:
+        
+        form = PriorityForm( request.POST )
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse('support:priority'))
+
+        pass
+    context = {'form':form,'profile':get_user_profile(request)}
+    return render(request,'support/new_priority.html',context)
+
 
 @login_required
 def client_companies(request):

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
-from .forms import TicketForm,StaffProfileForm,CompanyForm,ClientProfileForm,CategoryForm,StatusForm,PriorityForm
+from .forms import TicketForm,StaffProfileForm,CompanyForm,ClientProfileForm,CategoryForm
+from .forms import StatusForm,PriorityForm,TicketStatusForm,TicketCategoryForm,TicketOwnerForm
+from .forms import TicketPriorityForm,ReplyForm
 from django.contrib.auth.decorators import login_required
 from .models import Status,Ticket,StaffProfile,ClientProfile,Company,Category, Priority,Status,Reply
 from django.urls import reverse
@@ -49,6 +51,58 @@ def client_create_ticket(request):
         pass
     context = {'form':form,'profile':get_user_profile(request)}
     return render(request,'support/create_ticket.html',context)
+@login_required
+def change_ticket_status(request,id):
+    #method will always be post
+    ticket = Ticket.objects.get(id=id)
+    form = TicketStatusForm(instance=ticket,data=request.POST)
+    if form.is_valid:
+        form.save()
+        return HttpResponseRedirect(reverse('support:view_ticket',args=[id]))
+@login_required
+def change_ticket(request,id):
+    #method will always be post
+    ticket = Ticket.objects.get(id=id)
+    form = TicketCategoryForm(instance=ticket,data=request.POST)
+    if form.is_valid:
+        form.save()
+        return HttpResponseRedirect(reverse('support:view_ticket',args=[id]))
+@login_required
+def change_ticket_priority(request,id):
+    #method will always be post
+    ticket = Ticket.objects.get(id=id)
+    form = TicketPriorityForm(instance=ticket,data=request.POST)
+    if form.is_valid:
+        form.save()
+        return HttpResponseRedirect(reverse('support:view_ticket',args=[id]))
+@login_required
+def change_ticket_owner(request,id):
+    #method will always be post
+    ticket = Ticket.objects.get(id=id)
+    form = TicketOwnerForm(instance=ticket,data=request.POST)
+    if form.is_valid:
+        form.save()
+        return HttpResponseRedirect(reverse('support:view_ticket',args=[id]))
+@login_required
+def add_ticket_reply(request,id):
+    #method will always be post
+    ticket = Ticket.objects.get(id=id)
+    form = ReplyForm(data=request.POST)
+    if form.is_valid:
+        reply=form.save(commit=False)
+        reply.ticket = ticket
+        reply.replier = request.user
+        reply.save()
+        return HttpResponseRedirect(reverse('support:view_ticket',args=[id]))
+@login_required
+def change_ticket_category(request,id):
+    #method will always be post
+    ticket = Ticket.objects.get(id=id)
+    form = TicketCategoryForm(instance=ticket,data=request.POST)
+    if form.is_valid:
+        form.save()
+        return HttpResponseRedirect(reverse('support:view_ticket',args=[id]))
+
 
 @login_required    
 def create_staff_profile(request):
@@ -135,13 +189,30 @@ def view_ticket(request,id):
     ticket = Ticket.objects.get(id=id)
     profile = get_user_profile(request.user)
     clientprofile = get_user_profile(ticket.client)
+    replyform = ReplyForm()
     replies = []
+    statusform = TicketStatusForm(instance=ticket)
+    categoryform = TicketCategoryForm(instance=ticket)
+    ownerform = TicketOwnerForm(instance=ticket)
+    priorityform = TicketPriorityForm(instance=ticket)
+
     try:
-        replies = Reply.objects.get(ticket=ticket)
+        reply = Reply.objects.filter(ticket=id)
+        replies.extend(reply)
     except Reply.DoesNotExist:
         pass
             
-    context = {'ticket':ticket,'profile':profile,'replies':replies,'userprofile':clientprofile}
+    context = {
+        'ticket':ticket,
+        'profile':profile,
+        'replies':replies,
+        'userprofile':clientprofile,
+        'statusform':statusform,
+        'categoryform':categoryform,
+        'ownerform':ownerform,
+        'priorityform':priorityform,
+        'replyform':replyform
+        }
     return render(request,'support/view_ticket.html',context)
 
 @login_required

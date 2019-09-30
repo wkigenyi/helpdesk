@@ -19,16 +19,85 @@
                 <span class="metadata"><i class="fa fa-battery-three-quarters"></i>{{ticket.status}}</span>
             </p>
             <p>{{ticket.message}}</p>
+            <div class="row">
+                    <div class="section col-md-3">
+                            <form action="{% url 'support:change_ticket_status' ticket.id %}" method="POST">
+                                    {% csrf_token %}
+                                    {% bootstrap_form statusform %}
+                                    {% buttons %}
+                                    <button class="btn btn-default btn-block" type="submit"><i class="fa fa-save"></i>Change</button>
+                                    {% endbuttons %}
+                            </form>
+                    </div>
+                    <div class="section col-md-3">
+                            <form action="{% url 'support:change_ticket_category' ticket.id %}" method="POST">
+                                    {% csrf_token %}
+                                    {% bootstrap_form categoryform %}
+                                    {% buttons %}
+                                    <button class="btn btn-default btn-block" type="submit"><i class="fa fa-save"></i>Move</button>
+                                    {% endbuttons %}
+                            </form>
+                    </div>
+                    <div class="section col-md-3">
+                            <form action="{% url 'support:change_ticket_priority' ticket.id %}" method="POST">
+                                    {% csrf_token %}
+                                    {% bootstrap_form priorityform %}
+                                    {% buttons %}
+                                    <button class="btn btn-default btn-block" type="submit"><i class="fa fa-save"></i>Change</button>
+                                    {% endbuttons %}
+                            </form>
+                    </div>
+                    <div class="section col-md-3">
+                            <form action="{% url 'support:change_ticket_owner' ticket.id %}" method="POST">
+                                    {% csrf_token %}
+                                    {% bootstrap_form ownerform %}
+                                    {% buttons %}
+                                    <button class="btn btn-default btn-block" type="submit"><i class="fa fa-save"></i>Assign</button>
+                                    {% endbuttons %}
+                            </form>
+                    </div>
+                    
+            </div>
+
+            {% if replies %}
+            <div class="list-group">
+                    {% for reply in replies %}
+                    <li class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                                <small>{{reply.dt}}</small>
+                        </div>
+                        <p class="mb-1">{{ reply.message }}</p>
+                        <small>{{reply.replier}}</small>
+                        <span>
+                            <a href="#" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i>Edit</a>
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i>Delete</a>
+                        </span> 
+                    </li>
+                    {% endfor %}
+
+                </div>
+                
+                
+            {% endif %}
+
+
+            <form action="{% url 'support:add_ticket_reply' ticket.id %}" method="POST">
+                    {% csrf_token %}
+                    {% bootstrap_form replyform %}
+                    {% buttons %}
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>Reply</button>
+                    {% endbuttons %}
+            </form>
         </div>
         <div class="col-md-3" id="sidebar">
             <div class="section actions">
-                <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-print"></i>Print</a>
+                <a href="#" class="btn btn-default btn-lg btn-block"><i class="fa fa-print"></i>Print</a>
             </div>
             <div class="section actions">
-                    <a href="#" class="btn btn-primary btn-lg btn-block"><i class="fa fa-edit"></i>Edit</a>
+                    <a href="#" class="btn btn-default btn-lg btn-block"><i class="fa fa-edit"></i>Edit</a>
             </div>
             <div class="section actions">
-                    <a href="#" class="btn btn-warning btn-lg btn-block"><i class="fa fa-envelope"></i>Resend Email</a>
+                    <a href="#" class="btn btn-default btn-lg btn-block"><i class="fa fa-envelope"></i>Resend Email</a>
             </div>
             <div class="section actions">
                     <a href="{% url 'support:tickets' %}" class="btn btn-default btn-lg btn-block"><i class="fa fa-arrow-left"></i>Back To Tickets</a>

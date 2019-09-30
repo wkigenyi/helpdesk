@@ -1,0 +1,27 @@
+{% extends 'support/index.html' %}
+{% load bootstrap4 %}
+
+
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-9" id="main">
+            <h1>Create Company</h1>
+            <form action="{% url 'support:new_company' %}" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <button class="btn btn-primary" type="submit">Create Company</button>
+                {% endbuttons %}
+            </form>
+        </div>
+        <div class="col-md-3" id="sidebar">
+            <div class="well well-lg">
+                <p>Create a Company by entering the company's full name and short name</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

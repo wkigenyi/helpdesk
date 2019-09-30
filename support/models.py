@@ -41,10 +41,13 @@ class Company ( models.Model ):
     full_name = models.CharField( max_length=200 )
     short_name = models.CharField( max_length=50 )
 
+    def __str__(self):
+        return self.short_name
+
 class StaffProfile (models.Model):
     user = models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     surname = models.CharField(max_length=50)
-    othername = models.CharField(max_length=50)
+    other_name = models.CharField(max_length=50)
     telephone = PhoneField(help_text='Your Mobile Phone Number')
     def __str__(self):
         return self.surname+' '+self.othername
@@ -56,3 +59,6 @@ class ClientProfile (models.Model):
     other_name = models.CharField(max_length=50)
     telephone = PhoneField()
     company = models.ForeignKey( Company,on_delete=models.CASCADE )
+
+    def __str__(self):
+        return self.surname+' '+self.other_name

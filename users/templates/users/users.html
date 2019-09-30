@@ -1,0 +1,46 @@
+{% extends 'support/index.html' %}
+{% block content %}
+<h1>Users</h1>
+{% if users %}
+<table class="table table-striped table-middle-aligned">
+    <thead>
+        <tr>
+            <th scope="col">Email Address</th>
+            <th scope="col">Staff Account?</th>
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+            {% for someone in users %}
+            <tr>
+                <td>{{ someone.email }}</td>
+                <td><input type="checkbox" checked="{{ someone.is_admin }}" readonly /></td>
+                <td class="text-right">
+                    <div class="item-actions">
+                        <a class="btn btn-primary btn-sm" href="#"><i class="fa fa-pencil"></i>Edit</a>
+                        <a class="btn btn-warning btn-sm" href="{% url 'users:user_profile' someone.id %}"><i class="fa fa-user"></i>Profile</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+    </tbody>
+</table>
+<ul>
+
+            
+
+</ul>
+
+{% else %}
+<p>No Users Yet</p>
+{% endif %}
+{% endblock %}
+{% block actions %}
+                <div class="col-md-3" id="sidebar">
+                    
+                    <div class="section">
+                        <a class="btn btn-lg btn-success btn-block" href="{% url 'support:new_company' %}"><i class="fa fa-plus"></i>Create A User</a>
+                    </div>
+                    
+                </div>
+                {% endblock %}

@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
-from .forms import TicketForm,StaffProfileForm
+from .forms import TicketForm,StaffProfileForm,CompanyForm,ClientProfileForm
 from django.contrib.auth.decorators import login_required
-from .models import Status,Ticket,StaffProfile,ClientProfile
+from .models import Status,Ticket,StaffProfile,ClientProfile,Company
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
 from users.models import CustomUser
+from helpdesk.helpers import get_user_profile
 
 
 # Create your views here.
@@ -85,17 +86,77 @@ def create_staff_profile(request):
     context = {'form':form,'profile':userprofile}
     return render(request,'users/create_profile.html',context)
 
+@login_required    
+def create_client_profile(request,id):
+    """
+    Creating / Editing a user profile 
+    """
+    user = CustomUser.objects.get(id = id)
+    userprofile = None
+    #If the use has a profile, we edit that one
+    try:
+        userprofile = ClientProfile.objects.get(user = user)
+    
+        #Profile Exists, so we edit
+        
+        if request.method != 'POST':
+        #Client is creating a new Profile
+            form = ClientProfileForm(instance=userprofile)
+        else:
+            
+            form = ClientProfileForm(instance=userprofile,data= request.POST )
+            if form.is_valid:
+                form.save()
+                return HttpResponseRedirect(reverse('support:tickets'))
+    except:
+        #Dealing with a new profile
+        if request.method != 'POST':
+        #Client is creating a new Profile
+            form = ClientProfileForm()
+        else:
+            
+            form = ClientProfileForm( request.POST )
+            if form.is_valid:
+                profile = form.save(commit=False)
+                profile.user = user
+                profile.save()
+                return HttpResponseRedirect(reverse('users:users'))   
+    context = {'form':form,'profile':userprofile,'someone':user}
+    return render(request,'users/create_client_profile.html',context)
+
+
 def tickets(request):
     tickets = Ticket.objects.all()
-    context = { 'tickets':tickets,'profile':get_user_profile(request) }
+    context = { 'tickets':tickets,'profile':get_user_profile(request.user) }
     return render(request,'support/tickets.html',context)
 
 def my_tickets(request):
     tickets = Ticket.objects.filter(client=request.user)
-    context = { 'tickets':tickets,'profile':get_user_profile(request) }
+    context = { 'tickets':tickets,'profile':get_user_profile(request.user) }
     return render(request,'support/tickets.html',context)
 
+@login_required
+def client_companies(request):
+    companies = Company.objects.all()
+    context = { 'companies':companies }
+    return render(request,'support/companies.html',context)
 
+@login_required
+def new_company(request):
+    """
+    For the user to create a new company 
+    """
+    if request.method != 'POST':
+        #Client is creating a new company
+        form = CompanyForm()
+    else:
+
+        form = CompanyForm( request.POST ) 
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse('support:client_companies'))
+    context = {'form':form }
+    return render(request,'support/create-company.html',context)
 
 
 
@@ -121,13 +182,3 @@ def send_ticket_recieved_email(ticket):
     recipient_list = [admin.email]
     send_mail(subject,message,email_from,recipient_list,fail_silently=True)
 
-def get_user_profile( request ):
-    profile = None
-    try: 
-        profile = StaffProfile.objects.get(user = request.user)
-    except DoesNotExist:
-        profile = ClientProfile.objects.get(user = request.user)
-    except DoesNotExist:
-        profile = None
-    finally:
-        return profile

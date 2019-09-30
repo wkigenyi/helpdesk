@@ -1,0 +1,53 @@
+
+{% extends 'support/index.html' %}
+{% load bootstrap4 %}
+
+{% block main%}
+
+
+<div class="row">
+    <div class="col-md-9" id="main">
+        
+            
+                <h1>
+                    {% if userprofile %}
+                    Update Profile
+                    {% else %}
+                    Create Profile
+                    {% endif %}
+                </h1>
+                
+                    <form action="{% url 'support:new_profile' someone.id %}" class="form" method="POST">
+                        {% csrf_token %}
+                        
+                        {% bootstrap_form form %}
+                        <button name="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i>
+                            {% if userprofile %}
+                                Update Profile
+                            {% else %}
+                                Create Profile
+                            {% endif %}
+                        </button>
+                        <input type="hidden" name="next" value="{{ next }}"/>
+                    </form>
+                
+            
+        
+    </div>
+    <div class="col-md-3" id="sidebar">
+        <div class="section about">
+            <div class="well well-lg">
+                <p>You are {% if userprofile %} updating {% else %} creating {% endif %}profile for {{ someone }}</p>
+                
+            </div>
+        </div>
+        
+        <div class="section">
+                <a href="{% url 'users:password_reset' %}" class="btn btn-lg btn-block btn-warning"><i class="fa fa-pencil"></i>Edit User</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

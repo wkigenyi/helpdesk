@@ -1,6 +1,40 @@
 {% extends 'support/base.html' %}
 {% block navlinks %}
     {% if user.is_authenticated %}
+
+        {% if user.is_admin %}
+        <li>
+            <a href="{% url 'users:users' %}"><i class="fa fa-users"></i>Users</a>
+        </li>
+        <li>
+            <a href="{% url 'support:client_companies' %}"><i class="fa fa-building"></i>Companies</a>
+        </li>
+        <li class="dropdown">
+                <a 
+                id="settings" 
+                href="#" 
+                class="dropdown-toggle" 
+                data-toggle="dropdown" 
+                role="button"
+                aria-expanded="false">
+                    
+                <i class="fa fa-cogs" aria-hidden="true"></i>
+                Settings
+                <span class="caret"></span>
+                <span class="sr-only">{{ user }}</span>
+                </a>
+                <ul class="dropdown-menu settings" role="menu" aria-labelledby="settings">
+                    
+                    <li><a href="{% url 'support:create_staffprofile' %}"><i class="fa fa-tag" aria-hidden="true"></i>Categories</a></li>
+                    <li class="divider"></li>
+                    
+                    <li><a href="{% url 'support:create_staffprofile' %}"><i class="fa fa-lock" aria-hidden="true"></i>Priorities</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'users:logout' %}?next=/"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
+    
+                </ul>
+            </li>
+        {% endif %}
         <li class="dropdown">
             <a 
             id="user" 
@@ -10,7 +44,7 @@
             role="button"
             aria-expanded="false">
                 {% if profile %}
-                Hi {{ profile.othername }},
+                Hi {{ profile.other_name }},
                 {% else %}
                 {{ user }}
                 {% endif %}
@@ -20,7 +54,11 @@
             
             </a>
             <ul class="dropdown-menu user" role="menu" aria-labelledby="user">
+                {% if user.is_admin %}
                 <li><a href="{% url 'support:create_staffprofile' %}"><i class="fa fa-edit" aria-hidden="true"></i>Profile</a></li>
+                <li class="divider"></li>
+                {% endif %}
+                <li><a href="{% url 'support:create_staffprofile' %}"><i class="fa fa-lock" aria-hidden="true"></i>Change Password</a></li>
                 <li class="divider"></li>
                 <li><a href="{% url 'users:logout' %}?next=/"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></li>
 

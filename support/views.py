@@ -56,6 +56,7 @@ def create_staff_profile(request):
     Creating / Editing a user profile 
     """
     #If the use has a profile, we edit that one
+    profile = get_user_profile(request.user)
     try:
         userprofile = StaffProfile.objects.get(user = request.user)
     
@@ -79,11 +80,11 @@ def create_staff_profile(request):
             user = request.user
             form = StaffProfileForm( request.POST )
             if form.is_valid:
-                profile = form.save(commit=False)
-                profile.user = user
-                profile.save()
+                userprofile = form.save(commit=False)
+                userprofile.user = user
+                userprofile.save()
                 return HttpResponseRedirect(reverse('support:tickets'))   
-    context = {'form':form,'profile':userprofile}
+    context = {'form':form,'profile':profile}
     return render(request,'users/create_profile.html',context)
 
 @login_required    

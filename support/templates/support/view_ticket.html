@@ -1,0 +1,41 @@
+{% extends 'support/index.html' %}
+{% load bootstrap4 %}
+
+
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-9" id="main">
+            <h1>{{ticket.subject}}</h1>
+            <p class="post-metadata">
+                <span class="metadata"><i class="fa fa-calendar"></i>{{ticket.dt}}</span>
+                <span class="metadata"><i class="fa fa-user"></i>{{ticket.client}}</span>
+                {% if userprofile.company %}
+                    <span class="metadata"><i class="fa fa-building"></i>{{userprofile.company}}</span>
+                {% endif %}
+                <span class="metadata"><i class="fa fa-address-card"></i>{{ticket.ip}}</span>
+                <span class="metadata"><i class="fa fa-user"></i>{{ticket.owner}}</span>
+                <span class="metadata"><i class="fa fa-tag"></i>{{ticket.category}}</span>
+                <span class="metadata"><i class="fa fa-battery-three-quarters"></i>{{ticket.status}}</span>
+            </p>
+            <p>{{ticket.message}}</p>
+        </div>
+        <div class="col-md-3" id="sidebar">
+            <div class="section actions">
+                <a href="#" class="btn btn-success btn-lg btn-block"><i class="fa fa-print"></i>Print</a>
+            </div>
+            <div class="section actions">
+                    <a href="#" class="btn btn-primary btn-lg btn-block"><i class="fa fa-edit"></i>Edit</a>
+            </div>
+            <div class="section actions">
+                    <a href="#" class="btn btn-warning btn-lg btn-block"><i class="fa fa-envelope"></i>Resend Email</a>
+            </div>
+            <div class="section actions">
+                    <a href="{% url 'support:tickets' %}" class="btn btn-default btn-lg btn-block"><i class="fa fa-arrow-left"></i>Back To Tickets</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

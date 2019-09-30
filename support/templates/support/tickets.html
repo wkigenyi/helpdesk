@@ -21,7 +21,7 @@
                 <td>{{ ticket.status }}</td>
                 <td class="text-right">
                     <div class="item-actions">
-                        <a class="btn btn-default btn-sm" href="#"><i class="fa fa-eye"></i>Show</a>
+                        <a class="btn btn-default btn-sm" href="{% url 'support:view_ticket' ticket.id %}"><i class="fa fa-eye"></i>Show</a>
                     </div>
                 </td>
             </tr>

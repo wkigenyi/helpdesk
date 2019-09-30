@@ -1,0 +1,33 @@
+{% extends 'support/index.html' %}
+{% load bootstrap4 %}
+
+
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-9" id="main">
+            <h1>Edit Status</h1>
+            <form action="{% url 'support:edit_status' status.id %}" method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>Save Status</button>
+                {% endbuttons %}
+            </form>
+        </div>
+        <div class="col-md-3" id="sidebar">
+            <div class="well well-lg">
+                <p>Enter Status Name And Save</p>
+            </div>
+            <div class="section actions">
+                    <a href="{% url 'support:status' %}" class="btn btn-lg btn-block btn-success"><i class="fa fa-arrow-left"></i>Back To Status</a>
+            </div>
+            <div class="section actions">
+                    <a href="#" class="btn btn-lg btn-block btn-danger"><i class="fa fa-trash"></i>Delete</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

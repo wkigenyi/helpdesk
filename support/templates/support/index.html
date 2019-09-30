@@ -32,10 +32,17 @@
     
                 </ul>
             </li>
+            <li>
+                    <a href="{% url 'support:client_companies' %}"><i class="fa fa-building"></i>Companies</a>
+                </li>
+                <li>
+                        <a href="{% url 'support:tickets' %}"><i class="fa fa-ticket"></i>Tickets</a>
+                    </li>
         {% endif %}
-        <li>
-                <a href="{% url 'support:client_companies' %}"><i class="fa fa-building"></i>Companies</a>
-            </li>
+        
+                <li>
+                        <a href="{% url 'support:my_tickets' %}"><i class="fa fa-ticket"></i>My Tickets</a>
+                    </li>
         <li class="dropdown">
             <a 
             id="user" 

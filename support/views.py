@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from .forms import TicketForm,StaffProfileForm,CompanyForm,ClientProfileForm,CategoryForm,StatusForm,PriorityForm
 from django.contrib.auth.decorators import login_required
-from .models import Status,Ticket,StaffProfile,ClientProfile,Company,Category, Priority,Status
+from .models import Status,Ticket,StaffProfile,ClientProfile,Company,Category, Priority,Status,Reply
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.conf import settings
@@ -130,6 +130,19 @@ def tickets(request):
     tickets = Ticket.objects.all()
     context = { 'tickets':tickets,'profile':get_user_profile(request.user) }
     return render(request,'support/tickets.html',context)
+@login_required
+def view_ticket(request,id):
+    ticket = Ticket.objects.get(id=id)
+    profile = get_user_profile(request.user)
+    clientprofile = get_user_profile(ticket.client)
+    replies = []
+    try:
+        replies = Reply.objects.get(ticket=ticket)
+    except Reply.DoesNotExist:
+        pass
+            
+    context = {'ticket':ticket,'profile':profile,'replies':replies,'userprofile':clientprofile}
+    return render(request,'support/view_ticket.html',context)
 
 @login_required
 def my_tickets(request):
@@ -160,6 +173,67 @@ def new_category(request):
     context = {'form':form,'profile':get_user_profile(request)}
     return render(request,'support/new_category.html',context)
 
+@login_required    
+def edit_category(request,id):
+    """
+    If the client is editing a category 
+    """
+    category = Category.objects.get(id=id)
+
+    if request.method != 'POST':
+        #Client is creating a new ticket
+        form = CategoryForm(instance=category)
+    else:
+        
+        form = CategoryForm(instance=category, data=request.POST )
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse('support:category'))
+
+        pass
+    context = {'form':form,'profile':get_user_profile(request),'category':category}
+    return render(request,'support/edit_category.html',context)
+
+@login_required    
+def edit_status(request,id):
+    """
+    If the client is editing a Status 
+    """
+    status = Status.objects.get(id=id)
+
+    if request.method != 'POST':
+        #Client is creating a new ticket
+        form = StatusForm(instance=status)
+    else:
+        
+        form = StatusForm(instance=status, data=request.POST )
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse('support:status'))
+
+        pass
+    context = {'form':form,'profile':get_user_profile(request.user),'status':status}
+    return render(request,'support/edit_status.html',context)
+@login_required    
+def edit_priority(request,id):
+    """
+    If the client is editing a priority 
+    """
+    priority = Priority.objects.get(id=id)
+
+    if request.method != 'POST':
+        #Client is creating a new ticket
+        form = PriorityForm(instance=priority)
+    else:
+        
+        form = PriorityForm(instance=priority, data=request.POST )
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse('support:priority'))
+
+        pass
+    context = {'form':form,'profile':get_user_profile(request.user),'priority':priority}
+    return render(request,'support/edit_priority.html',context)
 
 
 
@@ -184,7 +258,7 @@ def new_status(request):
             return HttpResponseRedirect(reverse('support:status'))
 
         pass
-    context = {'form':form,'profile':get_user_profile(request)}
+    context = {'form':form,'profile':get_user_profile(request.user)}
     return render(request,'support/new_status.html',context)
 
 
@@ -209,7 +283,7 @@ def new_priority(request):
             return HttpResponseRedirect(reverse('support:priority'))
 
         pass
-    context = {'form':form,'profile':get_user_profile(request)}
+    context = {'form':form,'profile':get_user_profile(request.user)}
     return render(request,'support/new_priority.html',context)
 
 

@@ -21,10 +21,13 @@ def register( request ):
     else:
         form = UserForm( data=request.POST )
         if form.is_valid:
-            new_user = form.save()
-            user = authenticate( username=new_user.email,password= request.POST['password1'] )
-            login( request,user)
-            return HttpResponseRedirect(reverse('support:my_tickets'))
+            try:
+                new_user = form.save()
+                user = authenticate( username=new_user.email,password= request.POST['password1'] )
+                login( request,user)
+                return HttpResponseRedirect(reverse('support:my_tickets'))
+            except ValueError:
+                return HttpResponseRedirect(reverse('support:index'))
     context ={'form':form}        
     return render( request,'users/register.html',context )
 def users (request):

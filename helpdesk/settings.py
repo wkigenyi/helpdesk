@@ -139,6 +139,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
+DEFAULT_FROM_EMAIL = 'INTERMECH Helpdesk Team <noreply@donotreply.com>'
 
 # Configure Django App for Heroku.
 import django_heroku

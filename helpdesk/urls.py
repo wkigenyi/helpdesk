@@ -16,11 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.contrib.auth import views
+from users.views import reset_successful
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include(('support.urls','support'),namespace='support')),
     path('accounts/',include(('users.urls','users'),namespace='users')),
-    path('reset/<uidb64>/<token>/',views.PasswordResetConfirmView.as_view(),name='password_reset_confirm')
+    path('reset/<uidb64>/<token>/',views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'),name='password_reset_confirm'),
+    path('reset/done/',views.PasswordResetDoneView.as_view(template_name='users/reset_done.html'),name='password_reset_done'),
+    path('reset/complete/',views.LoginView.as_view(template_name='users/reset_complete.html'),name='password_reset_complete'),
     
 ]

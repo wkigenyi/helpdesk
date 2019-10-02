@@ -134,11 +134,11 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 #Mail Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'kigred.developer@gmail.com'
-EMAIL_HOST_PASSWORD = '7MillionDollars'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
 
 # Configure Django App for Heroku.
 import django_heroku

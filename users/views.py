@@ -37,6 +37,10 @@ def users (request):
     
     return render( request,'users/users.html',context)
 
+def reset_successful (request):
+    return HttpResponseRedirect(reverse('users:login'))
+
+
 def user_profile(request,id):
     someone = CustomUser.objects.get(id=id )
     userprofile = get_user_profile( someone )

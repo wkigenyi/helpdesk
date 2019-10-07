@@ -394,13 +394,13 @@ def get_ip_address(request):
 def send_ticket_created_email(ticket):
     subject = 'Your ticket has been received'
     message = 'ticket details'
-    email_from = settings.EMAIL_HOST_USER
+    email_from = settings.DEFAULT_EMAIL_FROM
     recipient_list = [ticket.client.email]
     send_mail(subject,message,email_from,recipient_list,fail_silently=True)
 def send_ticket_recieved_email(ticket):
-    subject = 'A Ticket has been recieved'
+    subject = 'Your Ticket has been received'
     message = 'Ticket ID:'+str(ticket.track_id)
-    email_from = settings.EMAIL_HOST_USER
+    email_from = settings.DEFAULT_EMAIL_FROM
     admin = CustomUser.objects.get(id=1)
     recipient_list = [admin.email]
     send_mail(subject,message,email_from,recipient_list,fail_silently=True)
